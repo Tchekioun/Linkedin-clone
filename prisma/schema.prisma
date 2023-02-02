@@ -9,3 +9,9 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model feed{
+  id Int @id @default(autoincrement())
+  body String
+  createdAt DateTime @default(now())
+}
