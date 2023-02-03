@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { feed, Prisma } from '@prisma/client';
+import { from, Observable } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateFeedDto } from './dto/create-feed.dto';
 import { UpdateFeedDto } from './dto/update-feed.dto';
 
 @Injectable()
 export class FeedsService {
   constructor(private prismaService: PrismaService) {}
-  create(createFeedDto: CreateFeedDto) {
-    return 'This action adds a new feed';
+  create(data: Prisma.feedCreateInput) {
+    return this.prismaService.feed.create({ data: data });
   }
 
   findAll(take: number, skip: number) {
@@ -15,6 +16,13 @@ export class FeedsService {
   }
 
   findOne(id: number) {
+    return `This action returns a #${id} feed`;
+  }
+  findPosts(take: number = 10, skip: number = 0): Observable<feed[]> {
+    return from(this.prismaService.feed.findMany({ take, skip }));
+  }
+
+  findSelected(id: number) {
     return `This action returns a #${id} feed`;
   }
 

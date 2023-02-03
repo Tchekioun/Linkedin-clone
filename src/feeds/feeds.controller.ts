@@ -11,6 +11,8 @@ import {
 import { FeedsService } from './feeds.service';
 import { CreateFeedDto } from './dto/create-feed.dto';
 import { UpdateFeedDto } from './dto/update-feed.dto';
+import { Observable } from 'rxjs';
+import { feed } from '@prisma/client';
 
 @Controller('feeds')
 export class FeedsController {
@@ -21,14 +23,18 @@ export class FeedsController {
     return this.feedsService.create(createFeedDto);
   }
 
-  @Get()
-  findAll(@Query('take') take: string, @Query('skip') skip: string) {
-    return this.feedsService.findAll(+take, +skip);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.feedsService.findOne(+id);
+  }
+
+  @Get()
+  findSelected(
+    @Query('take') take: number = 1,
+    @Query('skip') skip: number = 1,
+  ): Observable<feed[]> {
+    take = take > 20 ? 20 : take;
+    return this.feedsService.findPosts(take, skip);
   }
 
   @Patch(':id')
