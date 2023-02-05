@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { FeedsService } from './feeds.service';
 import { CreateFeedDto } from './dto/create-feed.dto';
@@ -30,8 +31,8 @@ export class FeedsController {
 
   @Get()
   findSelected(
-    @Query('take') take: number = 1,
-    @Query('skip') skip: number = 1,
+    @Query('take', ParseIntPipe) take: number = 1,
+    @Query('skip', ParseIntPipe) skip: number = 1,
   ): Observable<feed[]> {
     take = take > 20 ? 20 : take;
     return this.feedsService.findPosts(take, skip);
