@@ -1,4 +1,4 @@
 export class CreateFeedDto {
   body: string;
-  createdAt?: string | Date;
+  user_id: number;
 }
