@@ -14,8 +14,8 @@ model Feed{
   id Int @id @default(autoincrement())
   body String
   createdAt DateTime @default(now())
-  user_id Int
-  userRelation User @relation(fields: [user_id], references: [id]) 
+  author User @relation(fields: [authorId], references: [id]) 
+  authorId Int
 }
 
 model User{
@@ -33,5 +33,5 @@ model User{
 enum Role {
   ADMIN
   USER
-  PREMIUM 
+  PREMIUM
 }
