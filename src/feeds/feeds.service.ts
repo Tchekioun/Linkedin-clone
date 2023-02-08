@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { Feed, Prisma } from '@prisma/client';
 import { from, Observable } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateFeedDto } from './dto/create-feed.dto';
 import { UpdateFeedDto } from './dto/update-feed.dto';
 
 @Injectable()
 export class FeedsService {
   constructor(private prismaService: PrismaService) {}
-  create(data: Prisma.FeedCreateInput) {
+  create(data: Prisma.FeedCreateInput, userId) {
+    data.author = userId;
     return this.prismaService.feed.create({ data: data });
   }
 

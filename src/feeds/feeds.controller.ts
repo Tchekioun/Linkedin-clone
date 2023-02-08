@@ -8,19 +8,26 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { FeedsService } from './feeds.service';
 import { UpdateFeedDto } from './dto/update-feed.dto';
 import { Observable } from 'rxjs';
 import { Feed, Prisma } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CreateFeedDto } from './dto/create-feed.dto';
 
 @Controller('feeds')
 export class FeedsController {
   constructor(private readonly feedsService: FeedsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createFeedDto: Prisma.FeedCreateInput) {
-    return this.feedsService.create(createFeedDto);
+  create(@Body() createFeedDto: CreateFeedDto, @Request() req) {
+    console.log(req.user);
+    const userId = req.user.userId;
+    return this.feedsService.create(createFeedDto, userId);
   }
 
   @Get(':id')
