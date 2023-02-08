@@ -14,15 +14,16 @@ import {
 import { FeedsService } from './feeds.service';
 import { UpdateFeedDto } from './dto/update-feed.dto';
 import { Observable } from 'rxjs';
-import { Feed, Prisma } from '@prisma/client';
+import { Feed, Prisma, Role } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CreateFeedDto } from './dto/create-feed.dto';
+import { HasRoles } from 'src/auth/decorators/role.decorator';
 
 @Controller('feeds')
 export class FeedsController {
   constructor(private readonly feedsService: FeedsService) {}
 
   @UseGuards(JwtAuthGuard)
+  @HasRoles(Role.ADMIN, Role.PREMIUM)
   @Post()
   create(@Body() data: Prisma.FeedCreateInput, @Request() req) {
     const userId = req.user.userId;

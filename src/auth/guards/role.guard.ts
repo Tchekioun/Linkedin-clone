@@ -6,12 +6,12 @@ import { Role } from '@prisma/client';
 export class RoleGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isAllowed = await this.reflector.getAllAndOverride<Role[]>('roles', [
+    const isAllowed = this.reflector.getAllAndOverride<Role[]>('roles', [
       context.getHandler(),
       context.getClass(),
     ]);
     if (!isAllowed) return true;
-    const userRole: Role = await context.switchToHttp().getRequest().user.role;
-    return isAllowed.some((role) => userRole === role);
+    const userRole: Role = context.switchToHttp().getRequest().user.role;
+    return await isAllowed.some((role) => userRole.includes(role));
   }
 }
