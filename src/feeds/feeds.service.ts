@@ -8,9 +8,10 @@ import { UpdateFeedDto } from './dto/update-feed.dto';
 @Injectable()
 export class FeedsService {
   constructor(private prismaService: PrismaService) {}
-  create(data: Prisma.FeedCreateInput, userId) {
-    data.author = userId;
-    return this.prismaService.feed.create({ data: data });
+  create(data: CreateFeedDto, userId) {
+    return this.prismaService.feed.create({
+      data: { ...data, authorId: userId },
+    });
   }
 
   findAll(take: number, skip: number) {

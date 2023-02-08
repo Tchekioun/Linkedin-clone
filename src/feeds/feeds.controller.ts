@@ -24,10 +24,9 @@ export class FeedsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createFeedDto: CreateFeedDto, @Request() req) {
-    console.log(req.user);
+  create(@Body() data: Prisma.FeedCreateInput, @Request() req) {
     const userId = req.user.userId;
-    return this.feedsService.create(createFeedDto, userId);
+    return this.feedsService.create(data, userId);
   }
 
   @Get(':id')
